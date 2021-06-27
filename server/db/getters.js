@@ -1,4 +1,5 @@
 const uniqid = require("uniqid")
+const { createHash } = require("crypto");
 
 module.exports = (knex) => ({
     getPlayer: (playerId) => knex("players").where({id: playerId}).whereNull("deletedAt").first(),
@@ -6,8 +7,17 @@ module.exports = (knex) => ({
     updatePlayer: (playerId, payload) => knex("players").where("id", playerId).whereNull("deletedAt").update(payload),
     createPlayer: async (payload) => {
         const playerAlreadyExists = knex("players").where(payload).first()
-
-        return playerAlreadyExists ? playerAlreadyExists.id : knex("players").insert(Object.assign(payload, {id: uniqid()}))
+        return playerAlreadyExists ? playerAlreadyExists : knex("players").insert(Object.assign(payload, {id: uniqid()}))
     },
-    deletePlayer: (playerId) => knex("players").where({id: playerId}).update("deletedAt", knex.fn.now())
+    deletePlayer: (playerId) => knex("players").where({id: playerId}).update("deletedAt", knex.fn.now()),
+    getUser: (username, password) => {
+        // MD5 is not what I'd use in a prod env btw, this is just for the test
+        const hash = createHash("md5").update(password).digest("hex")
+        return knex("users").where({name: username, passwordHash: hash}).first()
+    },
+    createUser: async (username, password) => {
+        const hash = createHash("md5").update(password).digest("hex")
+        const userAlreadyExists = await knex("users").where({name: username, passwordHash: hash}).first()
+        return userAlreadyExists ? userAlreadyExists : knex("users").insert({id: uniqid(), name: username, passwordHash: hash})
+    },
 });

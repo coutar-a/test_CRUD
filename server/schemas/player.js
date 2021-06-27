@@ -2,10 +2,9 @@ const Joi = require("joi")
 
 
 const playerCreationSchema = Joi.object({
-    id: Joi.string(),
-    name: Joi.string(),
-    number: Joi.number(),
-    team: Joi.string()
+    name: Joi.string().required(),
+    number: Joi.number().required(),
+    team: Joi.string().required()
   });
 
   const playerUpdateSchema = Joi.object({
