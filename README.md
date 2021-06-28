@@ -92,8 +92,6 @@ Will update an existing player. Requires authentication.
 
 #### Example response
 
-#### Example response
-
 ```json
 {
     "data":
