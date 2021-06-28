@@ -50,22 +50,22 @@ app.get("/player/:player", async (req, res) => {
   res.send({ data });
 });
 
-app.delete("/player/:player", jwtMiddleware({ secret, algorithms: ['RS256'] }), async (req, res) => {
-  const data = await deletePlayer(req.body);
+app.delete("/player/:player", jwtMiddleware({ secret, algorithms: ['HS256'] }), async (req, res) => {
+  const data = await deletePlayer(req.params.player);
   res.send({ data });
 });
 
-app.put("/player/:player", jwtMiddleware({ secret, algorithms: ['RS256'] }), async (req, res) => {
+app.put("/player/:player", jwtMiddleware({ secret, algorithms: ['HS256'] }), async (req, res) => {
   const { error } = playerUpdateSchema.validate(req.body);
   if (error) {
     res.status(400).json(error);
     return;
   }
-  const data = await updatePlayer(req.body);
+  const data = await updatePlayer(req.params.player, req.body);
   res.send({ data });
 });
 
-app.post("/player", jwtMiddleware({ secret, algorithms: ['RS256'] }), async (req, res) => {
+app.post("/player", jwtMiddleware({ secret, algorithms: ['HS256'] }), async (req, res) => {
   const { error } = playerCreationSchema.validate(req.body);
   if (error) {
     res.status(400).json(error);

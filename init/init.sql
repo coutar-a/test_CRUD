@@ -5,9 +5,9 @@ CREATE DATABASE playercrud;
 CREATE TABLE players (
 	id varchar NOT NULL,
 	"name" varchar NULL,
-	"number" _int2 NULL,
+	"number" smallint NULL,
 	"team" varchar NULL,
-	"deletedAt" _timestamptz NULL DEFAULT null
+	"deletedAt" timestamptz NULL DEFAULT null
 );
 
 CREATE TABLE users (

@@ -4,6 +4,7 @@
   "description": "A basic CRUD app",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "jest"
   },
   "author": "",
